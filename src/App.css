@@ -1,6 +1,73 @@
-.App {
-  text-align: center;
+.app {
+  display: flex;
 }
+
+.app-navbar {
+  width: 200px;
+  height: 100vh;
+}
+
+.app-content {
+  width: calc(100% - 200px);
+  height: 100vh;
+}
+
+.app-symbol-charts {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  height: 100vh;
+
+  .symbol-charts-widget {
+    flex: 1 0 50%;
+    margin: 0;
+    height: 50%;
+  }
+
+  &.app-symbol-charts-6 {
+    .symbol-charts-widget {
+      flex: 1 0 33%;
+      margin: 0;
+      height: 50%;
+    }
+  }
+}
+
+.navbar {
+  .navbar-title {
+    display: none;
+    height: 30px;
+    line-height: 30px;
+
+    svg {
+      height: 100%;
+      cursor: pointer;
+    }
+  }
+  a {
+    display: block;
+    width: 100%;
+    height: 30px;
+    line-height: 30px;
+    padding: 5px;
+    text-decoration: none;
+    color: black;
+    /*background: blue;*/
+    border-bottom: 1px dashed #000;
+
+    &:hover {
+      background: rgba(0, 0, 0, 0.1);
+    }
+  }
+}
+
+.navbar-element-active a {
+  /*background-color: green;*/
+  font-weight: bold;
+  background: rgba(0, 0, 0, 0.1);
+}
+
+
 
 .App-logo {
   height: 40vmin;
