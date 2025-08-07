@@ -1,8 +1,33 @@
-# Getting Started with Create React App
+# TradingView React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-## Available Scripts
+## Docker Setup
+
+### Prerequisites
+- Docker
+- Docker Compose
+
+### Running with Docker
+
+To run the application using Docker:
+
+```bash
+# Build and start the container
+docker-compose up --build
+
+# Or run in detached mode
+docker-compose up -d --build
+```
+
+The application will be available at [http://localhost:3000](http://localhost:3000).
+
+To stop the container:
+```bash
+docker-compose down
+```
+
+## Available Scripts (Local Development)
 
 In the project directory, you can run:
 
