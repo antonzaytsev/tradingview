@@ -3,7 +3,7 @@ import SymbolCharts from './symbol-charts'
 import Navbar from './navbar'
 import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import { symbols, charts } from './lib/input';
+import { symbols } from './lib/input';
 
 function App() {
   return (

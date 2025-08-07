@@ -48,24 +48,26 @@ export const chartsFour = [
 
 export const symbols = [
   ['BTC', 'BYBIT:BTCUSDT'],
+  ['BTC [Kraken]', 'KRAKEN:BTCUSD'],
   // 'BINANCE:BTCUSDT',
   // 'BINANCE:BTCFDUSD',
   // 'COINBASE:BTCUSD',
   // 'KRAKEN:BTCUSD',
 
+  ['ETHUSD', 'COINBASE:ETHUSD'],
+
   ['ETH', 'BYBIT:ETHUSDT'],
-  // ['ETH', 'KRAKEN:ETHUSD'],
-
-  // 'BYBIT:SOLUSDT',
-  ['SOL', 'BYBIT:SOLUSDT'],
-  // ['SOL', 'BINANCE:SOLUSDT'],
-  // 'OKX:SOLUSDT',
-
-  // 'BITSTAMP:XRPUSD',
-  // 'BINANCE:XRPUSD',
+  ['ETH [Kraken]', 'KRAKEN:ETHUSD'],
 
   ['ADA', 'BYBIT:ADAUSDT'],
   // ['ADA', 'BINANCE:ADAUSDT'],
+
+  ['ARB', 'BYBIT:ARBUSDT'],
+
+  ['POL', 'BYBIT:POLUSDT'],
+
+  // 'BITSTAMP:XRPUSD',
+  // 'BINANCE:XRPUSD',
 
   ['TON', 'BYBIT:TONUSDT'],
   // 'OKX:TONUSDT',
@@ -79,14 +81,14 @@ export const symbols = [
   ['TRX', 'BYBIT:TRXUSDT'],
   // 'BINANCE:TRXUSDT',
 
+  ['SOL', 'BYBIT:SOLUSDT'],
+  // ['SOL', 'BINANCE:SOLUSDT'],
+  // 'OKX:SOLUSDT',
+
   // 'BYBIT:LTCUSDT',
   // 'BINANCE:LTCUSDT',
   // 'KUCOIN:LTCUSDT',
   // 'KRAKEN:LTCUSDT',
-
-  ['ARB', 'BYBIT:ARBUSDT'],
-
-  ['POL', 'BYBIT:POLUSDT'],
 
   ['USDKZT', 'FX_IDC:USDKZT', { hide_volume: true }, chartsFour],
   ['USDRUB', 'FX_IDC:USDRUB', { hide_volume: true }, chartsFour],
