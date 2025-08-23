@@ -16,7 +16,8 @@ export const BarStyles = {
 
 export const IntervalTypes = {
   D: 'D',
-  W: 'W'
+  W: 'W',
+  M: 'M'
 };
 
 export const RangeTypes = {
@@ -54,6 +55,7 @@ export default class TradingViewWidget extends PureComponent {
       60,
       120,
       180,
+      240,
       '1',
       '3',
       '5',
@@ -62,8 +64,10 @@ export default class TradingViewWidget extends PureComponent {
       '60',
       '120',
       '180',
+      '240',
       IntervalTypes.D,
-      IntervalTypes.W
+      IntervalTypes.W,
+      IntervalTypes.M
     ]),
     locale: PropTypes.string,
     news: PropTypes.arrayOf(PropTypes.string),
