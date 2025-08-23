@@ -1,8 +1,9 @@
 import { Themes } from "react-tradingview-widget";
 
+// [1,3,5,15,30,60,120,180,"1","3","5","15","30","60","120","180","D","W"].
 export const charts = [
   {
-    interval: '15', // [1,3,5,15,30,60,120,180,"1","3","5","15","30","60","120","180","D","W"]
+    interval: '15',
     // range: "5D", // 1D, 5D, 1M, 3M, 6M, YTD, 1Y, 60M, All
   },
   {
@@ -42,46 +43,41 @@ export const chartConfig = {
   withdateranges: false,
 }
 
-export const chartsFour = [
-  ...charts.slice(2, 6),
-]
-
 export const symbols = [
-  ['BTC', 'BYBIT:BTCUSDT'],
-  ['BTC [Kraken]', 'KRAKEN:BTCUSD'],
+  { coin: 'BTC', exchange: 'Bybit', symbol: 'BYBIT:BTCUSDT' },
+  { coin: 'BTC', exchange: 'Kraken', symbol: 'KRAKEN:BTCUSD' },
   // 'BINANCE:BTCUSDT',
   // 'BINANCE:BTCFDUSD',
   // 'COINBASE:BTCUSD',
   // 'KRAKEN:BTCUSD',
 
-  ['ETHUSD', 'COINBASE:ETHUSD'],
+  { coin: 'ETH', exchange: 'Coinbase', symbol: 'COINBASE:ETHUSD' },
+  { coin: 'ETH', exchange: 'Bybit', symbol: 'BYBIT:ETHUSDT' },
+  { coin: 'ETH', exchange: 'Kraken', symbol: 'KRAKEN:ETHUSD' },
 
-  ['ETH', 'BYBIT:ETHUSDT'],
-  ['ETH [Kraken]', 'KRAKEN:ETHUSD'],
-
-  ['ADA', 'BYBIT:ADAUSDT'],
+  // ['ADA', 'BYBIT:ADAUSDT'],
   // ['ADA', 'BINANCE:ADAUSDT'],
 
-  ['ARB', 'BYBIT:ARBUSDT'],
+  { coin: 'ARB', exchange: 'Bybit', symbol: 'BYBIT:ARBUSDT' },
 
-  ['POL', 'BYBIT:POLUSDT'],
+  { coin: 'POL', exchange: 'Bybit', symbol: 'BYBIT:POLUSDT' },
 
   // 'BITSTAMP:XRPUSD',
   // 'BINANCE:XRPUSD',
 
-  ['TON', 'BYBIT:TONUSDT'],
+  { coin: 'TON', exchange: 'Bybit', symbol: 'BYBIT:TONUSDT' },
   // 'OKX:TONUSDT',
 
-  ['AVAX', 'BYBIT:AVAXUSDT'],
+  // ['AVAX', 'BYBIT:AVAXUSDT'],
   // 'BINANCE:AVAXUSDT',
 
-  ['DOT', 'BYBIT:DOTUSDT'],
+  // ['DOT', 'BYBIT:DOTUSDT'],
   // 'BINANCE:DOTUSDT',
 
-  ['TRX', 'BYBIT:TRXUSDT'],
+  // ['TRX', 'BYBIT:TRXUSDT'],
   // 'BINANCE:TRXUSDT',
 
-  ['SOL', 'BYBIT:SOLUSDT'],
+  // ['SOL', 'BYBIT:SOLUSDT'],
   // ['SOL', 'BINANCE:SOLUSDT'],
   // 'OKX:SOLUSDT',
 
@@ -90,7 +86,7 @@ export const symbols = [
   // 'KUCOIN:LTCUSDT',
   // 'KRAKEN:LTCUSDT',
 
-  ['USDKZT', 'FX_IDC:USDKZT', { hide_volume: true }, chartsFour],
-  ['USDRUB', 'FX_IDC:USDRUB', { hide_volume: true }, chartsFour],
-  ['EURRUB', 'FX_IDC:EURRUB', { hide_volume: true }, chartsFour],
+  { coin: 'USDKZT', symbol: 'FX_IDC:USDKZT', settings: { chart: { hide_volume: true }, charts_amount: 4 } },
+  { coin: 'USDRUB', symbol: 'FX_IDC:USDRUB', settings: { chart: { hide_volume: true }, charts_amount: 4 } },
+  { coin: 'EURRUB', symbol: 'FX_IDC:EURRUB', settings: { chart: { hide_volume: true }, charts_amount: 4 } },
 ]

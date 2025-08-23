@@ -1,9 +1,15 @@
 import TradingViewWidget from "react-tradingview-widget";
 import { charts, chartConfig } from "./lib/input";
+import { useSettings } from "./contexts/SettingsContext";
 
-function SymbolCharts({ symbol, configOverrides, chartsOverride, el }) {
-  configOverrides = configOverrides || {}
-  const chartsList = el[3] || charts
+function SymbolCharts({ symbol, localSettings, exchange, chartsOverride, el }) {
+  const { settings } = useSettings();
+
+  const chartSettings = localSettings?.chart || {};
+  const chartsCount = localSettings?.charts_amount || settings.chartCount;
+
+  // Apply chart count setting - slice the charts array based on user preference
+  const chartsList = charts.slice(0, chartsCount);
 
   return (
     <div className={`app-symbol-charts app-symbol-charts-${chartsList.length}`}>
@@ -11,7 +17,7 @@ function SymbolCharts({ symbol, configOverrides, chartsOverride, el }) {
         const config = {
           ...chartConfig,
           ...chart,
-          ...configOverrides,
+          ...chartSettings,
           symbol
         }
 

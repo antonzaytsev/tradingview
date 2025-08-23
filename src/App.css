@@ -19,31 +19,118 @@
   height: 100vh;
 
   .symbol-charts-widget {
-    flex: 1 0 50%;
     margin: 0;
-    height: 50%;
   }
 
+  /* 1 chart - full screen */
+  &.app-symbol-charts-1 {
+    .symbol-charts-widget {
+      flex: 1 0 100%;
+      height: 100%;
+    }
+  }
+
+  /* 2 charts - side by side */
+  &.app-symbol-charts-2 {
+    .symbol-charts-widget {
+      flex: 1 0 50%;
+      height: 100%;
+    }
+  }
+
+  /* 3 charts - 2 on top, 1 on bottom */
+  &.app-symbol-charts-3 {
+    .symbol-charts-widget {
+      flex: 1 0 50%;
+      height: 50%;
+    }
+    .symbol-charts-widget:nth-child(3) {
+      flex: 1 0 100%;
+    }
+  }
+
+  /* 4 charts - 2x2 grid */
+  &.app-symbol-charts-4 {
+    .symbol-charts-widget {
+      flex: 1 0 50%;
+      height: 50%;
+    }
+  }
+
+  /* 5 charts - 3 on top, 2 on bottom */
+  &.app-symbol-charts-5 {
+    .symbol-charts-widget {
+      flex: 1 0 33.33%;
+      height: 50%;
+    }
+    .symbol-charts-widget:nth-child(4),
+    .symbol-charts-widget:nth-child(5) {
+      flex: 1 0 50%;
+    }
+  }
+
+  /* 6 charts - 3x2 grid */
   &.app-symbol-charts-6 {
     .symbol-charts-widget {
-      flex: 1 0 33%;
-      margin: 0;
+      flex: 1 0 33.33%;
+      height: 50%;
+    }
+  }
+
+  /* 7 charts - 4 on top, 3 on bottom */
+  &.app-symbol-charts-7 {
+    .symbol-charts-widget {
+      flex: 1 0 25%;
+      height: 50%;
+    }
+    .symbol-charts-widget:nth-child(5),
+    .symbol-charts-widget:nth-child(6),
+    .symbol-charts-widget:nth-child(7) {
+      flex: 1 0 33.33%;
+    }
+  }
+
+  /* 8 charts - 4x2 grid */
+  &.app-symbol-charts-8 {
+    .symbol-charts-widget {
+      flex: 1 0 25%;
       height: 50%;
     }
   }
 }
 
 .navbar {
-  .navbar-title {
-    display: none;
+  .navbar-header {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding: 10px;
+    border-bottom: 2px solid #000;
+    margin-bottom: 10px;
+  }
+
+  .settings-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
     height: 30px;
-    line-height: 30px;
 
     svg {
-      height: 100%;
-      cursor: pointer;
+      width: 20px;
+      height: 20px;
+    }
+
+    &:hover {
+      background: rgba(0, 0, 0, 0.1);
     }
   }
+
   a {
     display: block;
     width: 100%;
