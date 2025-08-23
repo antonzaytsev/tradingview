@@ -1,4 +1,4 @@
-import TradingViewWidget from "react-tradingview-widget";
+import TradingViewWidget from "./components/TradingViewWidget";
 import { charts, chartConfig } from "./lib/input";
 import { useSettings } from "./contexts/SettingsContext";
 
