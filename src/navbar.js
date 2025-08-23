@@ -28,7 +28,7 @@ function Navbar({ symbols }) {
         </div>
         <div className="navbar-links">
           {symbols.map(({coin, exchange, symbol}) => <div key={symbol} className={activeSymbol === `/${symbol}` ? 'navbar-element-active' : ''}><Link
-            to={`/${symbol}`}>{coin} {exchange}</Link></div>)}
+            to={`/${symbol}`}>{coin}{exchange ? ` [${exchange}]` : ''}</Link></div>)}
         </div>
       </div>
       <SettingsPanel
