@@ -8,7 +8,6 @@ function SymbolCharts({ symbol, localSettings, exchange, chartsOverride, el }) {
   const chartSettings = localSettings?.chart || {};
   const chartsCount = localSettings?.charts_amount || settings.chartCount;
 
-  // Apply chart count setting - slice the charts array based on user preference
   const chartsList = charts.slice(0, chartsCount);
 
   return (

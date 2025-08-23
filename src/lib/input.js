@@ -86,7 +86,9 @@ export const symbols = [
   // 'KUCOIN:LTCUSDT',
   // 'KRAKEN:LTCUSDT',
 
-  { coin: 'USDKZT', symbol: 'FX_IDC:USDKZT', settings: { chart: { hide_volume: true }, charts_amount: 4 } },
-  { coin: 'USDRUB', symbol: 'FX_IDC:USDRUB', settings: { chart: { hide_volume: true }, charts_amount: 4 } },
-  { coin: 'EURRUB', symbol: 'FX_IDC:EURRUB', settings: { chart: { hide_volume: true }, charts_amount: 4 } },
+  // { coin: 'USDKZT', symbol: 'FX_IDC:USDKZT', settings: { chart: { hide_volume: true }, charts_amount: 4 } },
+  { coin: 'USDKZT', symbol: 'FX_IDC:USDKZT', settings: { chart: { hide_volume: true } } },
+  { coin: 'USDRUB', symbol: 'FX_IDC:USDRUB', settings: { chart: { hide_volume: true } } },
+  { coin: 'EURRUB', symbol: 'FX_IDC:EURRUB', settings: { chart: { hide_volume: true } } },
+  { coin: 'USDEUR', symbol: 'FX_IDC:USDEUR', settings: { chart: { hide_volume: true } } },
 ]
