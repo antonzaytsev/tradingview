@@ -1,6 +1,7 @@
 import { Themes } from "../components/TradingViewWidget";
 
-// [1,3,5,15,30,60,120,180,"1","3","5","15","30","60","120","180","D","W"].
+// interval: [1,3,5,15,30,60,120,180,"1","3","5","15","30","60","120","180","D","W"].
+// range: [1D, 5D, 1M, 3M, 6M, YTD, 1Y, 60M, All]
 export const charts = [
   {
     interval: '15',

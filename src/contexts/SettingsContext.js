@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState } from 'react';
-import SettingsStorage from '../lib/settings';
+import ConfigStorage from '../lib/configStorage';
 
 const SettingsContext = createContext();
 
@@ -12,20 +12,20 @@ export const useSettings = () => {
 };
 
 export const SettingsProvider = ({ children }) => {
-  const [settings, setSettings] = useState(SettingsStorage.getSettings());
+  const [settings, setSettings] = useState(ConfigStorage.getConfig());
 
   const updateSetting = (key, value) => {
-    const updatedSettings = SettingsStorage.setSetting(key, value);
+    const updatedSettings = ConfigStorage.setConfigItem(key, value);
     setSettings(updatedSettings);
   };
 
   const updateSettings = (newSettings) => {
-    const updatedSettings = SettingsStorage.updateSettings(newSettings);
+    const updatedSettings = ConfigStorage.updateConfig(newSettings);
     setSettings(updatedSettings);
   };
 
   const resetSettings = () => {
-    const defaultSettings = SettingsStorage.resetSettings();
+    const defaultSettings = ConfigStorage.resetConfig();
     setSettings(defaultSettings);
   };
 

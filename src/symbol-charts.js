@@ -1,9 +1,13 @@
 import TradingViewWidget from "./components/TradingViewWidget";
-import { charts, chartConfig } from "./lib/input";
+import { ConfigManager } from "./lib/config";
 import { useSettings } from "./contexts/SettingsContext";
 
 function SymbolCharts({ symbol, localSettings, exchange, chartsOverride, el }) {
   const { settings } = useSettings();
+
+  // Get effective configuration from ConfigManager (localStorage or defaults)
+  const charts = ConfigManager.getCharts();
+  const chartConfig = ConfigManager.getChartConfig();
 
   const chartSettings = localSettings?.chart || {};
   const chartsCount = localSettings?.charts_amount || settings.chartCount;
