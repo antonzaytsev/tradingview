@@ -238,6 +238,74 @@
   background: #333;
   border-radius: 4px;
   border: 1px solid #444;
+  position: relative;
+  cursor: grab;
+  transition: all 0.2s ease;
+}
+
+.symbol-item:hover, .chart-item:hover {
+  background: #3a3a3a;
+  border-color: #555;
+}
+
+.symbol-item.dragging, .chart-item.dragging {
+  background: #2a2a2a;
+  border: 2px solid #666;
+  cursor: grabbing;
+  opacity: 0.8;
+}
+
+.symbol-item.dragging input,
+.symbol-item.dragging button,
+.chart-item.dragging select,
+.chart-item.dragging button {
+  opacity: 0.3;
+}
+
+.symbol-item.dragging .drag-handle,
+.chart-item.dragging .drag-handle {
+  opacity: 0.5;
+}
+
+.symbol-item.drag-over, .chart-item.drag-over {
+  border-color: #2196f3;
+  background: rgba(33, 150, 243, 0.1);
+  box-shadow: 0 0 10px rgba(33, 150, 243, 0.3);
+}
+
+/* Smooth transitions for better UX */
+.symbols-list, .charts-list {
+  transition: all 0.2s ease;
+}
+
+.symbol-item, .chart-item {
+  transition: all 0.2s ease;
+}
+
+.symbol-item:not(.dragging):hover, .chart-item:not(.dragging):hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.drag-handle {
+  color: #888;
+  cursor: grab;
+  padding: 4px;
+  border-radius: 4px;
+  transition: color 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.drag-handle:hover {
+  color: #ccc;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.dragging .drag-handle {
+  cursor: grabbing;
+  color: #aaa;
 }
 
 .symbol-item input, .chart-item select {
@@ -272,12 +340,6 @@
 
 .remove-btn:hover {
   background-color: #d32f2f;
-}
-
-/* Add forms */
-.add-symbol, .add-chart {
-  border-top: 1px solid #444;
-  padding-top: 20px;
 }
 
 .symbol-form, .chart-form {

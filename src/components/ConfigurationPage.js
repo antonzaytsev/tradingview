@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useRef } from 'react';
+import React, { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import { ConfigManager } from '../lib/config';
 import { useSettings } from '../contexts/SettingsContext';
 import { Themes } from './TradingViewWidget';
@@ -157,12 +157,142 @@ const ConfigurationPage = ({ onSymbolsChange }) => {
     });
   }, []);
 
+  // Drag and drop functionality for symbols
+  const [draggedSymbolIndex, setDraggedSymbolIndex] = useState(null);
+  const [dragOverSymbolIndex, setDragOverSymbolIndex] = useState(null);
+
+  // Create a visual preview of symbols during drag
+  const visualSymbols = useMemo(() => {
+    if (draggedSymbolIndex === null || dragOverSymbolIndex === null || draggedSymbolIndex === dragOverSymbolIndex) {
+      return symbols;
+    }
+
+    const result = [...symbols];
+    const [draggedSymbol] = result.splice(draggedSymbolIndex, 1);
+    result.splice(dragOverSymbolIndex, 0, draggedSymbol);
+    return result;
+  }, [symbols, draggedSymbolIndex, dragOverSymbolIndex]);
+
+  const handleSymbolDragStart = useCallback((e, index) => {
+    setDraggedSymbolIndex(index);
+    e.dataTransfer.effectAllowed = 'move';
+    e.dataTransfer.setData('text/plain', index.toString());
+  }, []);
+
+  const handleSymbolDragEnd = useCallback(() => {
+    setDraggedSymbolIndex(null);
+    setDragOverSymbolIndex(null);
+  }, []);
+
+  const handleSymbolDragOver = useCallback((e, index) => {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'move';
+
+    if (draggedSymbolIndex !== null && draggedSymbolIndex !== index) {
+      setDragOverSymbolIndex(index);
+    }
+  }, [draggedSymbolIndex]);
+
+  const handleSymbolDragLeave = useCallback((e) => {
+    // Only clear drag over if we're leaving the entire symbols list area
+    if (!e.currentTarget.contains(e.relatedTarget)) {
+      setDragOverSymbolIndex(null);
+    }
+  }, []);
+
+  const handleSymbolDrop = useCallback((e, dropIndex) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    if (draggedSymbolIndex === null || dragOverSymbolIndex === null) {
+      setDraggedSymbolIndex(null);
+      setDragOverSymbolIndex(null);
+      return;
+    }
+
+    // Apply the same transformation that we show in the visual preview
+    setSymbols(prev => {
+      const newSymbols = [...prev];
+      const [draggedSymbol] = newSymbols.splice(draggedSymbolIndex, 1);
+      newSymbols.splice(dragOverSymbolIndex, 0, draggedSymbol);
+      return newSymbols;
+    });
+
+    setDraggedSymbolIndex(null);
+    setDragOverSymbolIndex(null);
+  }, [draggedSymbolIndex, dragOverSymbolIndex]);
+
+  // Drag and drop functionality for charts
+  const [draggedChartIndex, setDraggedChartIndex] = useState(null);
+  const [dragOverChartIndex, setDragOverChartIndex] = useState(null);
+
+  // Create a visual preview of charts during drag
+  const visualCharts = useMemo(() => {
+    if (draggedChartIndex === null || dragOverChartIndex === null || draggedChartIndex === dragOverChartIndex) {
+      return charts;
+    }
+
+    const result = [...charts];
+    const [draggedChart] = result.splice(draggedChartIndex, 1);
+    result.splice(dragOverChartIndex, 0, draggedChart);
+    return result;
+  }, [charts, draggedChartIndex, dragOverChartIndex]);
+
+  const handleChartDragStart = useCallback((e, index) => {
+    setDraggedChartIndex(index);
+    e.dataTransfer.effectAllowed = 'move';
+    e.dataTransfer.setData('text/plain', index.toString());
+  }, []);
+
+  const handleChartDragEnd = useCallback(() => {
+    setDraggedChartIndex(null);
+    setDragOverChartIndex(null);
+  }, []);
+
+  const handleChartDragOver = useCallback((e, index) => {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'move';
+
+    if (draggedChartIndex !== null && draggedChartIndex !== index) {
+      setDragOverChartIndex(index);
+    }
+  }, [draggedChartIndex]);
+
+  const handleChartDragLeave = useCallback((e) => {
+    // Only clear drag over if we're leaving the entire charts list area
+    if (!e.currentTarget.contains(e.relatedTarget)) {
+      setDragOverChartIndex(null);
+    }
+  }, []);
+
+  const handleChartDrop = useCallback((e, dropIndex) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    if (draggedChartIndex === null || dragOverChartIndex === null) {
+      setDraggedChartIndex(null);
+      setDragOverChartIndex(null);
+      return;
+    }
+
+    // Apply the same transformation that we show in the visual preview
+    setCharts(prev => {
+      const newCharts = [...prev];
+      const [draggedChart] = newCharts.splice(draggedChartIndex, 1);
+      newCharts.splice(dragOverChartIndex, 0, draggedChart);
+      return newCharts;
+    });
+
+    setDraggedChartIndex(null);
+    setDragOverChartIndex(null);
+  }, [draggedChartIndex, dragOverChartIndex]);
+
   // Chart config management
   const updateChartConfig = useCallback((field, value) => {
     setChartConfig(prev => ({ ...prev, [field]: value }));
   }, []);
 
-  const intervalOptions = ['1', '3', '5', '15', '30', '60', '120', '180', 'D', 'W', 'M'];
+  const intervalOptions = ['1', '3', '5', '15', '30', '60', '120', '180', '240', 'D', 'W', 'M'];
   const themeOptions = Object.values(Themes);
 
   return (
@@ -241,33 +371,60 @@ const ConfigurationPage = ({ onSymbolsChange }) => {
             <h2>Trading Pairs</h2>
 
             <div className="symbols-list">
-              {symbols.map((symbol, index) => (
-                <div key={index} className="symbol-item">
-                  <input
-                    type="text"
-                    placeholder="Coin"
-                    value={symbol.coin || ''}
-                    onChange={(e) => updateSymbol(index, 'coin', e.target.value)}
-                  />
-                  <input
-                    type="text"
-                    placeholder="Exchange"
-                    value={symbol.exchange || ''}
-                    onChange={(e) => updateSymbol(index, 'exchange', e.target.value)}
-                  />
-                  <input
-                    type="text"
-                    placeholder="Symbol (e.g., BYBIT:BTCUSDT)"
-                    value={symbol.symbol || ''}
-                    onChange={(e) => updateSymbol(index, 'symbol', e.target.value)}
-                  />
-                  <button onClick={() => removeSymbol(index)} className="remove-btn">Remove</button>
-                </div>
-              ))}
+              {visualSymbols.map((symbol, index) => {
+                // Find the original index in the base symbols array for visual styling
+                const originalIndex = symbols.findIndex(s => s === symbol);
+                const isCurrentlyDragged = draggedSymbolIndex === originalIndex;
+
+                return (
+                  <div
+                    key={`${symbol.coin}-${symbol.symbol}-${index}`}
+                    className={`symbol-item ${isCurrentlyDragged ? 'dragging' : ''}`}
+                    draggable
+                    onDragStart={(e) => handleSymbolDragStart(e, originalIndex)}
+                    onDragOver={(e) => handleSymbolDragOver(e, index)}
+                    onDragLeave={handleSymbolDragLeave}
+                    onDrop={(e) => handleSymbolDrop(e, index)}
+                    onDragEnd={handleSymbolDragEnd}
+                  >
+                  <div className="drag-handle" title="Drag to reorder">
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                      <circle cx="4" cy="4" r="1" fill="currentColor"/>
+                      <circle cx="4" cy="8" r="1" fill="currentColor"/>
+                      <circle cx="4" cy="12" r="1" fill="currentColor"/>
+                      <circle cx="8" cy="4" r="1" fill="currentColor"/>
+                      <circle cx="8" cy="8" r="1" fill="currentColor"/>
+                      <circle cx="8" cy="12" r="1" fill="currentColor"/>
+                      <circle cx="12" cy="4" r="1" fill="currentColor"/>
+                      <circle cx="12" cy="8" r="1" fill="currentColor"/>
+                      <circle cx="12" cy="12" r="1" fill="currentColor"/>
+                    </svg>
+                  </div>
+                    <input
+                      type="text"
+                      placeholder="Coin"
+                      value={symbol.coin || ''}
+                      onChange={(e) => updateSymbol(originalIndex, 'coin', e.target.value)}
+                    />
+                    <input
+                      type="text"
+                      placeholder="Exchange"
+                      value={symbol.exchange || ''}
+                      onChange={(e) => updateSymbol(originalIndex, 'exchange', e.target.value)}
+                    />
+                    <input
+                      type="text"
+                      placeholder="Symbol (e.g., BYBIT:BTCUSDT)"
+                      value={symbol.symbol || ''}
+                      onChange={(e) => updateSymbol(originalIndex, 'symbol', e.target.value)}
+                    />
+                    <button onClick={() => removeSymbol(originalIndex)} className="remove-btn">Remove</button>
+                  </div>
+                );
+              })}
             </div>
 
             <div className="add-symbol">
-              <h3>Add New Trading Pair</h3>
               <div className="symbol-form">
                 <input
                   type="text"
@@ -297,23 +454,50 @@ const ConfigurationPage = ({ onSymbolsChange }) => {
             <h2>Chart Intervals</h2>
 
             <div className="charts-list">
-              {charts.map((chart, index) => (
-                <div key={index} className="chart-item">
-                  <select
-                    value={chart.interval}
-                    onChange={(e) => updateChart(index, 'interval', e.target.value)}
+              {visualCharts.map((chart, index) => {
+                // Find the original index in the base charts array for visual styling
+                const originalIndex = charts.findIndex(c => c === chart);
+                const isCurrentlyDragged = draggedChartIndex === originalIndex;
+
+                return (
+                  <div
+                    key={`${chart.interval}-${index}`}
+                    className={`chart-item ${isCurrentlyDragged ? 'dragging' : ''}`}
+                    draggable
+                    onDragStart={(e) => handleChartDragStart(e, originalIndex)}
+                    onDragOver={(e) => handleChartDragOver(e, index)}
+                    onDragLeave={handleChartDragLeave}
+                    onDrop={(e) => handleChartDrop(e, index)}
+                    onDragEnd={handleChartDragEnd}
                   >
-                    {intervalOptions.map(interval => (
-                      <option key={interval} value={interval}>{interval}</option>
-                    ))}
-                  </select>
-                  <button onClick={() => removeChart(index)} className="remove-btn">Remove</button>
-                </div>
-              ))}
+                    <div className="drag-handle" title="Drag to reorder">
+                      <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                        <circle cx="4" cy="4" r="1" fill="currentColor"/>
+                        <circle cx="4" cy="8" r="1" fill="currentColor"/>
+                        <circle cx="4" cy="12" r="1" fill="currentColor"/>
+                        <circle cx="8" cy="4" r="1" fill="currentColor"/>
+                        <circle cx="8" cy="8" r="1" fill="currentColor"/>
+                        <circle cx="8" cy="12" r="1" fill="currentColor"/>
+                        <circle cx="12" cy="4" r="1" fill="currentColor"/>
+                        <circle cx="12" cy="8" r="1" fill="currentColor"/>
+                        <circle cx="12" cy="12" r="1" fill="currentColor"/>
+                      </svg>
+                    </div>
+                    <select
+                      value={chart.interval}
+                      onChange={(e) => updateChart(originalIndex, 'interval', e.target.value)}
+                    >
+                      {intervalOptions.map(interval => (
+                        <option key={interval} value={interval}>{interval}</option>
+                      ))}
+                    </select>
+                    <button onClick={() => removeChart(originalIndex)} className="remove-btn">Remove</button>
+                  </div>
+                );
+              })}
             </div>
 
             <div className="add-chart">
-              <h3>Add New Chart Interval</h3>
               <div className="chart-form">
                 <select
                   value={newChart.interval}
