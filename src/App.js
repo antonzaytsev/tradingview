@@ -14,12 +14,18 @@ function App() {
   
   // Load symbols on mount
   useEffect(() => {
-    setSymbols(ConfigManager.getSymbols());
+    const allSymbols = ConfigManager.getSymbols();
+    // Filter symbols based on visibility (default to visible if not set)
+    const visibleSymbols = allSymbols.filter(symbol => symbol.visible !== false);
+    setSymbols(visibleSymbols);
   }, []);
 
   // Function to refresh symbols (to be called after config changes)
   const refreshSymbols = () => {
-    setSymbols(ConfigManager.getSymbols());
+    const allSymbols = ConfigManager.getSymbols();
+    // Filter symbols based on visibility (default to visible if not set)
+    const visibleSymbols = allSymbols.filter(symbol => symbol.visible !== false);
+    setSymbols(visibleSymbols);
   };
 
   return (

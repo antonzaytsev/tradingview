@@ -51,28 +51,28 @@ export const chartConfig = {
 }
 
 export const symbols = [
-  { coin: 'BTC', exchange: 'Bybit', symbol: 'BYBIT:BTCUSDT' },
-  { coin: 'BTC', exchange: 'Kraken', symbol: 'KRAKEN:BTCUSD' },
+  { coin: 'BTC', exchange: 'Bybit', symbol: 'BYBIT:BTCUSDT', visible: true },
+  { coin: 'BTC', exchange: 'Kraken', symbol: 'KRAKEN:BTCUSD', visible: true },
   // 'BINANCE:BTCUSDT',
   // 'BINANCE:BTCFDUSD',
   // 'COINBASE:BTCUSD',
   // 'KRAKEN:BTCUSD',
 
-  { coin: 'ETH', exchange: 'Coinbase', symbol: 'COINBASE:ETHUSD' },
-  { coin: 'ETH', exchange: 'Bybit', symbol: 'BYBIT:ETHUSDT' },
-  { coin: 'ETH', exchange: 'Kraken', symbol: 'KRAKEN:ETHUSD' },
+  { coin: 'ETH', exchange: 'Coinbase', symbol: 'COINBASE:ETHUSD', visible: true },
+  { coin: 'ETH', exchange: 'Bybit', symbol: 'BYBIT:ETHUSDT', visible: true },
+  { coin: 'ETH', exchange: 'Kraken', symbol: 'KRAKEN:ETHUSD', visible: true },
 
   // ['ADA', 'BYBIT:ADAUSDT'],
   // ['ADA', 'BINANCE:ADAUSDT'],
 
-  { coin: 'ARB', exchange: 'Bybit', symbol: 'BYBIT:ARBUSDT' },
+  { coin: 'ARB', exchange: 'Bybit', symbol: 'BYBIT:ARBUSDT', visible: true },
 
-  { coin: 'POL', exchange: 'Bybit', symbol: 'BYBIT:POLUSDT' },
+  { coin: 'POL', exchange: 'Bybit', symbol: 'BYBIT:POLUSDT', visible: true },
 
   // 'BITSTAMP:XRPUSD',
   // 'BINANCE:XRPUSD',
 
-  { coin: 'TON', exchange: 'Bybit', symbol: 'BYBIT:TONUSDT' },
+  { coin: 'TON', exchange: 'Bybit', symbol: 'BYBIT:TONUSDT', visible: true },
   // 'OKX:TONUSDT',
 
   // ['AVAX', 'BYBIT:AVAXUSDT'],
@@ -94,8 +94,8 @@ export const symbols = [
   // 'KRAKEN:LTCUSDT',
 
   // { coin: 'USDKZT', symbol: 'FX_IDC:USDKZT', settings: { chart: { hide_volume: true }, charts_amount: 4 } },
-  { coin: 'USDKZT', symbol: 'FX_IDC:USDKZT', settings: { chart: { hide_volume: true } } },
-  { coin: 'USDRUB', symbol: 'FX_IDC:USDRUB', settings: { chart: { hide_volume: true } } },
-  { coin: 'EURRUB', symbol: 'FX_IDC:EURRUB', settings: { chart: { hide_volume: true } } },
-  { coin: 'USDEUR', symbol: 'FX_IDC:USDEUR', settings: { chart: { hide_volume: true } } },
+  { coin: 'USDKZT', symbol: 'FX_IDC:USDKZT', visible: true, settings: { chart: { hide_volume: true } } },
+  { coin: 'USDRUB', symbol: 'FX_IDC:USDRUB', visible: true, settings: { chart: { hide_volume: true } } },
+  { coin: 'EURRUB', symbol: 'FX_IDC:EURRUB', visible: true, settings: { chart: { hide_volume: true } } },
+  { coin: 'USDEUR', symbol: 'FX_IDC:USDEUR', visible: true, settings: { chart: { hide_volume: true } } },
 ]

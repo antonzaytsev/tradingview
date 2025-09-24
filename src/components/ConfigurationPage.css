@@ -308,7 +308,7 @@
   color: #aaa;
 }
 
-.symbol-item input, .chart-item select {
+.chart-item select {
   flex: 1;
   padding: 8px;
   background: #1e1e1e;
@@ -318,11 +318,7 @@
   font-size: 14px;
 }
 
-.symbol-item input::placeholder {
-  color: #888;
-}
-
-.symbol-item input:focus, .chart-item select:focus {
+.chart-item select:focus {
   outline: none;
   border-color: #2196f3;
 }
@@ -386,6 +382,33 @@
   align-items: center;
   gap: 15px;
   flex: 1;
+}
+
+/* Symbol Controls Styles */
+.symbol-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1;
+}
+
+.symbol-controls input {
+  flex: 1;
+  padding: 8px;
+  background: #1e1e1e;
+  border: 1px solid #555;
+  border-radius: 4px;
+  color: white;
+  font-size: 14px;
+}
+
+.symbol-controls input::placeholder {
+  color: #888;
+}
+
+.symbol-controls input:focus {
+  outline: none;
+  border-color: #2196f3;
 }
 
 .visibility-checkbox-inline {
@@ -527,6 +550,16 @@
   }
 
   .chart-controls select {
+    width: 100%;
+  }
+
+  .symbol-controls {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .symbol-controls input {
     width: 100%;
   }
 }

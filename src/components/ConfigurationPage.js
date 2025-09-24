@@ -9,7 +9,7 @@ const ConfigurationPage = ({ onSymbolsChange }) => {
   const [symbols, setSymbols] = useState([]);
   const [charts, setCharts] = useState([]);
   const [chartConfig, setChartConfig] = useState({});
-  const [newSymbol, setNewSymbol] = useState({ coin: '', exchange: '', symbol: '' });
+  const [newSymbol, setNewSymbol] = useState({ coin: '', exchange: '', symbol: '', visible: true });
   const [newChart, setNewChart] = useState({ interval: '15', visible: true });
 
   // SettingsPage state
@@ -109,7 +109,7 @@ const ConfigurationPage = ({ onSymbolsChange }) => {
   const addSymbol = useCallback(() => {
     if (newSymbol.coin && newSymbol.symbol) {
       setSymbols(prev => [...prev, { ...newSymbol }]);
-      setNewSymbol({ coin: '', exchange: '', symbol: '' });
+      setNewSymbol({ coin: '', exchange: '', symbol: '', visible: true });
     }
   }, [newSymbol]);
 
@@ -121,6 +121,17 @@ const ConfigurationPage = ({ onSymbolsChange }) => {
     setSymbols(prev => {
       const updated = [...prev];
       updated[index] = { ...updated[index], [field]: value };
+      return updated;
+    });
+  }, []);
+
+  // Toggle symbol visibility
+  const toggleSymbolVisibility = useCallback((index) => {
+    setSymbols(prev => {
+      const updated = [...prev];
+      // Default to true if visible property doesn't exist (backward compatibility)
+      const currentVisible = updated[index].visible !== false;
+      updated[index] = { ...updated[index], visible: !currentVisible };
       return updated;
     });
   }, []);
@@ -360,24 +371,35 @@ const ConfigurationPage = ({ onSymbolsChange }) => {
                       <circle cx="12" cy="12" r="1" fill="currentColor"/>
                     </svg>
                   </div>
-                    <input
-                      type="text"
-                      placeholder="Coin"
-                      value={symbol.coin || ''}
-                      onChange={(e) => updateSymbol(originalIndex, 'coin', e.target.value)}
-                    />
-                    <input
-                      type="text"
-                      placeholder="Exchange"
-                      value={symbol.exchange || ''}
-                      onChange={(e) => updateSymbol(originalIndex, 'exchange', e.target.value)}
-                    />
-                    <input
-                      type="text"
-                      placeholder="Symbol (e.g., BYBIT:BTCUSDT)"
-                      value={symbol.symbol || ''}
-                      onChange={(e) => updateSymbol(originalIndex, 'symbol', e.target.value)}
-                    />
+                    <div className="symbol-controls">
+                      <input
+                        type="text"
+                        placeholder="Coin"
+                        value={symbol.coin || ''}
+                        onChange={(e) => updateSymbol(originalIndex, 'coin', e.target.value)}
+                      />
+                      <input
+                        type="text"
+                        placeholder="Exchange"
+                        value={symbol.exchange || ''}
+                        onChange={(e) => updateSymbol(originalIndex, 'exchange', e.target.value)}
+                      />
+                      <input
+                        type="text"
+                        placeholder="Symbol (e.g., BYBIT:BTCUSDT)"
+                        value={symbol.symbol || ''}
+                        onChange={(e) => updateSymbol(originalIndex, 'symbol', e.target.value)}
+                      />
+                      <label className="visibility-checkbox-inline">
+                        <input
+                          type="checkbox"
+                          checked={symbol.visible !== false}
+                          onChange={() => toggleSymbolVisibility(originalIndex)}
+                        />
+                        <span className="checkmark-small"></span>
+                        Visible
+                      </label>
+                    </div>
                     <button onClick={() => removeSymbol(originalIndex)} className="remove-btn">Remove</button>
                   </div>
                 );
