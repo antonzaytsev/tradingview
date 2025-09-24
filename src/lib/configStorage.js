@@ -47,14 +47,6 @@ export class ConfigStorage {
     return this.updateConfig({ [key]: value });
   }
 
-  static resetConfig() {
-    try {
-      localStorage.removeItem(CONFIG_KEY);
-    } catch (error) {
-      console.error('Failed to reset config:', error);
-    }
-    return DEFAULT_CONFIG;
-  }
 
   // Specialized methods for trading configuration
   static getSymbols() {

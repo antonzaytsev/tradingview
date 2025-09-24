@@ -24,16 +24,11 @@ export const SettingsProvider = ({ children }) => {
     setSettings(updatedSettings);
   };
 
-  const resetSettings = () => {
-    const defaultSettings = ConfigStorage.resetConfig();
-    setSettings(defaultSettings);
-  };
 
   const value = {
     settings,
     updateSetting,
     updateSettings,
-    resetSettings,
   };
 
   return (

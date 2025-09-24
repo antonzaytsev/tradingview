@@ -6,13 +6,13 @@ export class ConfigManager {
   // Get effective symbols (from localStorage or defaults)
   static getSymbols() {
     const stored = ConfigStorage.getSymbols();
-    return stored || defaultSymbols;
+    return (stored && stored.length > 0) ? stored : defaultSymbols;
   }
 
   // Get effective charts configuration (from localStorage or defaults)
   static getCharts() {
     const stored = ConfigStorage.getCharts();
-    return stored || defaultCharts;
+    return (stored && stored.length > 0) ? stored : defaultCharts;
   }
 
   // Get effective chart config (from localStorage or defaults)
@@ -36,21 +36,6 @@ export class ConfigManager {
     return ConfigStorage.setChartConfig(chartConfig);
   }
 
-  // Reset specific configuration to defaults
-  static resetSymbols() {
-    ConfigStorage.setConfigItem('symbols', null);
-    return defaultSymbols;
-  }
-
-  static resetCharts() {
-    ConfigStorage.setConfigItem('charts', null);
-    return defaultCharts;
-  }
-
-  static resetChartConfig() {
-    ConfigStorage.setConfigItem('chartConfig', null);
-    return defaultChartConfig;
-  }
 
   // Get all configuration at once
   static getAllConfig() {
@@ -59,6 +44,22 @@ export class ConfigManager {
       charts: this.getCharts(),
       chartConfig: this.getChartConfig(),
     };
+  }
+
+  // Utility method to clear localStorage and restore defaults
+  static clearStorageAndRestoreDefaults() {
+    try {
+      localStorage.removeItem('tradingview-app-settings');
+      console.log('Cleared localStorage and restored defaults');
+      return {
+        symbols: defaultSymbols,
+        charts: defaultCharts,
+        chartConfig: defaultChartConfig,
+      };
+    } catch (error) {
+      console.error('Failed to clear localStorage:', error);
+      return this.getAllConfig();
+    }
   }
 }
 
