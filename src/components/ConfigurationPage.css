@@ -379,6 +379,62 @@
   background-color: #45a049;
 }
 
+
+/* Chart Controls Styles */
+.chart-controls {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  flex: 1;
+}
+
+.visibility-checkbox-inline {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  user-select: none;
+  color: #cccccc;
+  font-size: 0.9rem;
+  white-space: nowrap;
+}
+
+.visibility-checkbox-inline input[type="checkbox"] {
+  display: none;
+}
+
+.checkmark-small {
+  width: 16px;
+  height: 16px;
+  background-color: #1e1e1e;
+  border: 2px solid #555;
+  border-radius: 3px;
+  position: relative;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.visibility-checkbox-inline:hover .checkmark-small {
+  border-color: #2196f3;
+}
+
+.visibility-checkbox-inline input:checked + .checkmark-small {
+  background-color: #2196f3;
+  border-color: #2196f3;
+}
+
+.visibility-checkbox-inline input:checked + .checkmark-small::after {
+  content: '';
+  position: absolute;
+  left: 4px;
+  top: 1px;
+  width: 4px;
+  height: 8px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
 /* Chart config styling */
 .chart-config {
   display: grid;
@@ -463,17 +519,14 @@
     grid-template-columns: 1fr;
   }
 
-  .chart-count-control {
+
+  .chart-controls {
     flex-direction: column;
+    align-items: flex-start;
     gap: 10px;
   }
 
-  .chart-count-slider {
-    order: 2;
-  }
-
-  .chart-count-value {
-    order: 1;
-    align-self: center;
+  .chart-controls select {
+    width: 100%;
   }
 }

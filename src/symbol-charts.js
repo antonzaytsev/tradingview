@@ -10,9 +10,9 @@ function SymbolCharts({ symbol, localSettings, exchange, chartsOverride, el }) {
   const chartConfig = ConfigManager.getChartConfig();
 
   const chartSettings = localSettings?.chart || {};
-  const chartsCount = localSettings?.charts_amount || settings.chartCount;
 
-  const chartsList = charts.slice(0, chartsCount);
+  // Filter charts based on visibility instead of count (default to visible if not set)
+  const chartsList = charts.filter(chart => chart.visible !== false);
 
   return (
     <div className={`app-symbol-charts app-symbol-charts-${chartsList.length}`}>

@@ -10,11 +10,10 @@ const ConfigurationPage = ({ onSymbolsChange }) => {
   const [charts, setCharts] = useState([]);
   const [chartConfig, setChartConfig] = useState({});
   const [newSymbol, setNewSymbol] = useState({ coin: '', exchange: '', symbol: '' });
-  const [newChart, setNewChart] = useState({ interval: '15' });
+  const [newChart, setNewChart] = useState({ interval: '15', visible: true });
 
   // SettingsPage state
   const { settings, updateSetting } = useSettings();
-  const [tempChartCount, setTempChartCount] = useState(settings.chartCount);
 
   const [saveStatus, setSaveStatus] = useState('');
   const isInitialized = useRef(false);
@@ -33,9 +32,8 @@ const ConfigurationPage = ({ onSymbolsChange }) => {
     setSymbols(config.symbols);
     setCharts(config.charts);
     setChartConfig(config.chartConfig);
-    setTempChartCount(settings.chartCount);
     isInitialized.current = true;
-  }, [settings.chartCount]);
+  }, []);
 
   // Helper function to show status with debouncing
   const showStatus = useCallback((message) => {
@@ -95,16 +93,6 @@ const ConfigurationPage = ({ onSymbolsChange }) => {
     return () => clearTimeout(saveTimer);
   }, [chartConfig]);
 
-  // Auto-save chart count with debouncing
-  useEffect(() => {
-    if (!isInitialized.current) return;
-
-    const saveTimer = setTimeout(() => {
-      updateSetting('chartCount', tempChartCount);
-    }, 300);
-
-    return () => clearTimeout(saveTimer);
-  }, [tempChartCount]);
 
   // Cleanup timeout on unmount
   useEffect(() => {
@@ -141,7 +129,7 @@ const ConfigurationPage = ({ onSymbolsChange }) => {
   const addChart = useCallback(() => {
     if (newChart.interval) {
       setCharts(prev => [...prev, { ...newChart }]);
-      setNewChart({ interval: '15' });
+      setNewChart({ interval: '15', visible: true });
     }
   }, [newChart]);
 
@@ -153,6 +141,17 @@ const ConfigurationPage = ({ onSymbolsChange }) => {
     setCharts(prev => {
       const updated = [...prev];
       updated[index] = { ...updated[index], [field]: value };
+      return updated;
+    });
+  }, []);
+
+  // Toggle chart visibility
+  const toggleChartVisibility = useCallback((index) => {
+    setCharts(prev => {
+      const updated = [...prev];
+      // Default to true if visible property doesn't exist (backward compatibility)
+      const currentVisible = updated[index].visible !== false;
+      updated[index] = { ...updated[index], visible: !currentVisible };
       return updated;
     });
   }, []);
@@ -327,45 +326,6 @@ const ConfigurationPage = ({ onSymbolsChange }) => {
 
 
         <div className="configuration-content">
-          {/* Chart Display Section */}
-          <section className="config-section">
-            <h2>Chart Display</h2>
-
-            <div className="setting-group">
-              <label htmlFor="chart-count">Number of Charts per Symbol:</label>
-              <div className="chart-count-control">
-                <input
-                  id="chart-count"
-                  type="range"
-                  min="1"
-                  max="8"
-                  value={tempChartCount}
-                  onChange={(e) => setTempChartCount(parseInt(e.target.value))}
-                  className="chart-count-slider"
-                />
-                <span className="chart-count-value">{tempChartCount}</span>
-              </div>
-              <small className="setting-description">
-                Controls how many time interval charts are displayed for each trading symbol
-              </small>
-
-              <div className="setting-preview">
-                <h3>Preview</h3>
-                <p>With {tempChartCount} chart{tempChartCount !== 1 ? 's' : ''}, you'll see:</p>
-                <ul>
-                  {tempChartCount >= 1 && <li>15 minute chart</li>}
-                  {tempChartCount >= 2 && <li>1 hour chart</li>}
-                  {tempChartCount >= 3 && <li>4 hour chart</li>}
-                  {tempChartCount >= 4 && <li>Daily chart</li>}
-                  {tempChartCount >= 5 && <li>Weekly chart</li>}
-                  {tempChartCount >= 6 && <li>Monthly chart</li>}
-                  {tempChartCount >= 7 && <li>Additional interval (if configured)</li>}
-                  {tempChartCount >= 8 && <li>Additional interval (if configured)</li>}
-                </ul>
-              </div>
-            </div>
-          </section>
-
           {/* Trading Pairs Section */}
           <section className="config-section">
             <h2>Trading Pairs</h2>
@@ -483,14 +443,25 @@ const ConfigurationPage = ({ onSymbolsChange }) => {
                         <circle cx="12" cy="12" r="1" fill="currentColor"/>
                       </svg>
                     </div>
-                    <select
-                      value={chart.interval}
-                      onChange={(e) => updateChart(originalIndex, 'interval', e.target.value)}
-                    >
-                      {intervalOptions.map(interval => (
-                        <option key={interval} value={interval}>{interval}</option>
-                      ))}
-                    </select>
+                    <div className="chart-controls">
+                      <select
+                        value={chart.interval}
+                        onChange={(e) => updateChart(originalIndex, 'interval', e.target.value)}
+                      >
+                        {intervalOptions.map(interval => (
+                          <option key={interval} value={interval}>{interval}</option>
+                        ))}
+                      </select>
+                      <label className="visibility-checkbox-inline">
+                        <input
+                          type="checkbox"
+                          checked={chart.visible !== false}
+                          onChange={() => toggleChartVisibility(originalIndex)}
+                        />
+                        <span className="checkmark-small"></span>
+                        Visible
+                      </label>
+                    </div>
                     <button onClick={() => removeChart(originalIndex)} className="remove-btn">Remove</button>
                   </div>
                 );

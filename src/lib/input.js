@@ -5,26 +5,32 @@ import { Themes } from "../components/TradingViewWidget";
 export const charts = [
   {
     interval: '15',
+    visible: true,
     // range: "5D", // 1D, 5D, 1M, 3M, 6M, YTD, 1Y, 60M, All
   },
   {
     interval: '60',
+    visible: true,
     // range: "4M"
   },
   {
     interval: '240',
+    visible: true,
     // range: "30M",
   },
   {
     interval: 'D',
+    visible: true,
     // range: "120M",
   },
   {
     interval: 'W',
+    visible: true,
     // range: "30M",
   },
   {
     interval: 'M',
+    visible: true,
     // range: '60M',
   },
 ]

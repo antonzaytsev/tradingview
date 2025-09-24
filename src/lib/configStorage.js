@@ -2,7 +2,6 @@
 const CONFIG_KEY = 'tradingview-app-settings';
 
 const DEFAULT_CONFIG = {
-  chartCount: 6, // Default number of charts to display
   theme: 'dark',
   // Chart configuration settings
   chartConfig: null, // Will use input.js defaults if null
