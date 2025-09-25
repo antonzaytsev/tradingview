@@ -225,11 +225,11 @@
 }
 
 /* Symbols styling */
-.symbols-list, .charts-list {
+.symbols-list {
   margin-bottom: 20px;
 }
 
-.symbol-item, .chart-item {
+.symbol-item {
   display: flex;
   gap: 10px;
   align-items: center;
@@ -243,12 +243,12 @@
   transition: all 0.2s ease;
 }
 
-.symbol-item:hover, .chart-item:hover {
+.symbol-item:hover {
   background: #3a3a3a;
   border-color: #555;
 }
 
-.symbol-item.dragging, .chart-item.dragging {
+.symbol-item.dragging {
   background: #2a2a2a;
   border: 2px solid #666;
   cursor: grabbing;
@@ -256,33 +256,30 @@
 }
 
 .symbol-item.dragging input,
-.symbol-item.dragging button,
-.chart-item.dragging select,
-.chart-item.dragging button {
+.symbol-item.dragging button {
   opacity: 0.3;
 }
 
-.symbol-item.dragging .drag-handle,
-.chart-item.dragging .drag-handle {
+.symbol-item.dragging .drag-handle {
   opacity: 0.5;
 }
 
-.symbol-item.drag-over, .chart-item.drag-over {
+.symbol-item.drag-over {
   border-color: #2196f3;
   background: rgba(33, 150, 243, 0.1);
   box-shadow: 0 0 10px rgba(33, 150, 243, 0.3);
 }
 
 /* Smooth transitions for better UX */
-.symbols-list, .charts-list {
+.symbols-list {
   transition: all 0.2s ease;
 }
 
-.symbol-item, .chart-item {
+.symbol-item {
   transition: all 0.2s ease;
 }
 
-.symbol-item:not(.dragging):hover, .chart-item:not(.dragging):hover {
+.symbol-item:not(.dragging):hover {
   transform: translateY(-1px);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
@@ -308,20 +305,6 @@
   color: #aaa;
 }
 
-.chart-item select {
-  flex: 1;
-  padding: 8px;
-  background: #1e1e1e;
-  border: 1px solid #555;
-  border-radius: 4px;
-  color: white;
-  font-size: 14px;
-}
-
-.chart-item select:focus {
-  outline: none;
-  border-color: #2196f3;
-}
 
 .remove-btn {
   background-color: #f44336;
@@ -338,14 +321,14 @@
   background-color: #d32f2f;
 }
 
-.symbol-form, .chart-form {
+.symbol-form {
   display: flex;
   gap: 10px;
   align-items: center;
   flex-wrap: wrap;
 }
 
-.symbol-form input, .chart-form select {
+.symbol-form input {
   flex: 1;
   min-width: 200px;
   padding: 8px;
@@ -360,7 +343,7 @@
   color: #888;
 }
 
-.symbol-form button, .chart-form button {
+.symbol-form button {
   background-color: #4caf50;
   color: white;
   border: none;
@@ -371,18 +354,11 @@
   white-space: nowrap;
 }
 
-.symbol-form button:hover, .chart-form button:hover {
+.symbol-form button:hover {
   background-color: #45a049;
 }
 
 
-/* Chart Controls Styles */
-.chart-controls {
-  display: flex;
-  align-items: center;
-  gap: 15px;
-  flex: 1;
-}
 
 /* Symbol Controls Styles */
 .symbol-controls {
@@ -458,6 +434,94 @@
   transform: rotate(45deg);
 }
 
+/* Chart intervals grid styling */
+.charts-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  gap: 15px;
+  padding: 0 20px;
+  margin-bottom: 20px;
+  max-width: 1000px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.chart-item-compact {
+  border: 2px solid #3a3a3a;
+  border-radius: 12px;
+  padding: 24px 16px;
+  text-align: center;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  user-select: none;
+  position: relative;
+  min-height: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  aspect-ratio: 1;
+}
+
+.chart-item-compact.visible {
+  background-color: #2a4a3a;
+  border-color: #4caf50;
+  box-shadow: 0 4px 16px rgba(76, 175, 80, 0.3);
+}
+
+.chart-item-compact.hidden {
+  background-color: #2a2a2a;
+  border-color: #3a3a3a;
+  opacity: 0.6;
+}
+
+.chart-item-compact:hover {
+  border-color: #555;
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+}
+
+.chart-item-compact.visible:hover {
+  border-color: #66bb6a;
+  box-shadow: 0 6px 24px rgba(76, 175, 80, 0.4);
+}
+
+.chart-item-compact:active {
+  transform: translateY(0);
+  transition: transform 0.1s ease;
+}
+
+.chart-interval-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  pointer-events: none;
+}
+
+.interval-text {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin-bottom: 8px;
+}
+
+.check-indicator {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.checkmark {
+  color: #4caf50;
+  font-size: 24px;
+  font-weight: bold;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
 /* Chart config styling */
 .chart-config {
   display: grid;
@@ -529,28 +593,43 @@
     flex-direction: column;
   }
 
-  .symbol-item, .chart-item {
+  .symbol-item {
     flex-direction: column;
     align-items: stretch;
   }
 
-  .symbol-form, .chart-form {
+  .symbol-form {
     flex-direction: column;
   }
 
+  .charts-grid {
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(4, 1fr);
+    gap: 12px;
+    padding: 0 15px;
+    max-width: none;
+  }
+  
+  .chart-item-compact {
+    padding: 16px 12px;
+    min-height: 90px;
+  }
+  
+  .interval-text {
+    font-size: 1.2rem;
+  }
+  
+  .check-indicator {
+    width: 28px;
+    height: 28px;
+  }
+  
+  .checkmark {
+    font-size: 20px;
+  }
+  
   .chart-config {
     grid-template-columns: 1fr;
-  }
-
-
-  .chart-controls {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 10px;
-  }
-
-  .chart-controls select {
-    width: 100%;
   }
 
   .symbol-controls {

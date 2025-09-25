@@ -4,13 +4,42 @@ import { useSettings } from '../contexts/SettingsContext';
 import { Themes } from './TradingViewWidget';
 import './ConfigurationPage.css';
 
+// Utility function to sort chart intervals from smaller to bigger
+const sortChartsByInterval = (chartsToSort) => {
+  return [...chartsToSort].sort((a, b) => {
+    const aInterval = a.interval;
+    const bInterval = b.interval;
+    
+    // Handle special cases first
+    const timeOrder = { 'D': 1000, 'W': 2000, 'M': 3000 };
+    
+    // If both are special time intervals
+    if (timeOrder[aInterval] && timeOrder[bInterval]) {
+      return timeOrder[aInterval] - timeOrder[bInterval];
+    }
+    
+    // If one is special, put it after numeric
+    if (timeOrder[aInterval] && !timeOrder[bInterval]) {
+      return 1;
+    }
+    if (!timeOrder[aInterval] && timeOrder[bInterval]) {
+      return -1;
+    }
+    
+    // Both are numeric, convert and compare
+    const aNum = parseInt(aInterval, 10);
+    const bNum = parseInt(bInterval, 10);
+    
+    return aNum - bNum;
+  });
+};
+
 const ConfigurationPage = ({ onSymbolsChange }) => {
   // ConfigPage state
   const [symbols, setSymbols] = useState([]);
   const [charts, setCharts] = useState([]);
   const [chartConfig, setChartConfig] = useState({});
   const [newSymbol, setNewSymbol] = useState({ coin: '', exchange: '', symbol: '', visible: true });
-  const [newChart, setNewChart] = useState({ interval: '15', visible: true });
 
   // SettingsPage state
   const { settings, updateSetting } = useSettings();
@@ -30,7 +59,20 @@ const ConfigurationPage = ({ onSymbolsChange }) => {
   useEffect(() => {
     const config = ConfigManager.getAllConfig();
     setSymbols(config.symbols);
-    setCharts(config.charts);
+    
+    // Create comprehensive chart list with all available intervals inline
+    const allIntervals = ['1', '3', '5', '15', '30', '60', '120', '180', '240', 'D', 'W', 'M'];
+    const existingChartsMap = new Map();
+    config.charts.forEach(chart => {
+      existingChartsMap.set(chart.interval, chart);
+    });
+    
+    const completeCharts = allIntervals.map(interval => {
+      const existing = existingChartsMap.get(interval);
+      return existing || { interval, visible: false };
+    });
+    
+    setCharts(sortChartsByInterval(completeCharts));
     setChartConfig(config.chartConfig);
     isInitialized.current = true;
   }, []);
@@ -113,6 +155,12 @@ const ConfigurationPage = ({ onSymbolsChange }) => {
     }
   }, [newSymbol]);
 
+  // Handle form submission for adding symbols
+  const handleAddSymbolSubmit = useCallback((e) => {
+    e.preventDefault();
+    addSymbol();
+  }, [addSymbol]);
+
   const removeSymbol = useCallback((index) => {
     setSymbols(prev => prev.filter((_, i) => i !== index));
   }, []);
@@ -136,33 +184,16 @@ const ConfigurationPage = ({ onSymbolsChange }) => {
     });
   }, []);
 
-  // Chart management
-  const addChart = useCallback(() => {
-    if (newChart.interval) {
-      setCharts(prev => [...prev, { ...newChart }]);
-      setNewChart({ interval: '15', visible: true });
-    }
-  }, [newChart]);
 
-  const removeChart = useCallback((index) => {
-    setCharts(prev => prev.filter((_, i) => i !== index));
-  }, []);
-
-  const updateChart = useCallback((index, field, value) => {
+  // Toggle chart visibility for specific interval
+  const toggleChartVisibility = useCallback((interval) => {
     setCharts(prev => {
-      const updated = [...prev];
-      updated[index] = { ...updated[index], [field]: value };
-      return updated;
-    });
-  }, []);
-
-  // Toggle chart visibility
-  const toggleChartVisibility = useCallback((index) => {
-    setCharts(prev => {
-      const updated = [...prev];
-      // Default to true if visible property doesn't exist (backward compatibility)
-      const currentVisible = updated[index].visible !== false;
-      updated[index] = { ...updated[index], visible: !currentVisible };
+      const updated = prev.map(chart => {
+        if (chart.interval === interval) {
+          return { ...chart, visible: !chart.visible };
+        }
+        return chart;
+      });
       return updated;
     });
   }, []);
@@ -232,77 +263,13 @@ const ConfigurationPage = ({ onSymbolsChange }) => {
     setDragOverSymbolIndex(null);
   }, [draggedSymbolIndex, dragOverSymbolIndex]);
 
-  // Drag and drop functionality for charts
-  const [draggedChartIndex, setDraggedChartIndex] = useState(null);
-  const [dragOverChartIndex, setDragOverChartIndex] = useState(null);
-
-  // Create a visual preview of charts during drag
-  const visualCharts = useMemo(() => {
-    if (draggedChartIndex === null || dragOverChartIndex === null || draggedChartIndex === dragOverChartIndex) {
-      return charts;
-    }
-
-    const result = [...charts];
-    const [draggedChart] = result.splice(draggedChartIndex, 1);
-    result.splice(dragOverChartIndex, 0, draggedChart);
-    return result;
-  }, [charts, draggedChartIndex, dragOverChartIndex]);
-
-  const handleChartDragStart = useCallback((e, index) => {
-    setDraggedChartIndex(index);
-    e.dataTransfer.effectAllowed = 'move';
-    e.dataTransfer.setData('text/plain', index.toString());
-  }, []);
-
-  const handleChartDragEnd = useCallback(() => {
-    setDraggedChartIndex(null);
-    setDragOverChartIndex(null);
-  }, []);
-
-  const handleChartDragOver = useCallback((e, index) => {
-    e.preventDefault();
-    e.dataTransfer.dropEffect = 'move';
-
-    if (draggedChartIndex !== null && draggedChartIndex !== index) {
-      setDragOverChartIndex(index);
-    }
-  }, [draggedChartIndex]);
-
-  const handleChartDragLeave = useCallback((e) => {
-    // Only clear drag over if we're leaving the entire charts list area
-    if (!e.currentTarget.contains(e.relatedTarget)) {
-      setDragOverChartIndex(null);
-    }
-  }, []);
-
-  const handleChartDrop = useCallback((e, dropIndex) => {
-    e.preventDefault();
-    e.stopPropagation();
-
-    if (draggedChartIndex === null || dragOverChartIndex === null) {
-      setDraggedChartIndex(null);
-      setDragOverChartIndex(null);
-      return;
-    }
-
-    // Apply the same transformation that we show in the visual preview
-    setCharts(prev => {
-      const newCharts = [...prev];
-      const [draggedChart] = newCharts.splice(draggedChartIndex, 1);
-      newCharts.splice(dragOverChartIndex, 0, draggedChart);
-      return newCharts;
-    });
-
-    setDraggedChartIndex(null);
-    setDragOverChartIndex(null);
-  }, [draggedChartIndex, dragOverChartIndex]);
 
   // Chart config management
   const updateChartConfig = useCallback((field, value) => {
     setChartConfig(prev => ({ ...prev, [field]: value }));
   }, []);
 
-  const intervalOptions = ['1', '3', '5', '15', '30', '60', '120', '180', '240', 'D', 'W', 'M'];
+
   const themeOptions = Object.values(Themes);
 
   return (
@@ -407,7 +374,7 @@ const ConfigurationPage = ({ onSymbolsChange }) => {
             </div>
 
             <div className="add-symbol">
-              <div className="symbol-form">
+              <form className="symbol-form" onSubmit={handleAddSymbolSubmit}>
                 <input
                   type="text"
                   placeholder="Coin"
@@ -426,8 +393,8 @@ const ConfigurationPage = ({ onSymbolsChange }) => {
                   value={newSymbol.symbol}
                   onChange={(e) => setNewSymbol({ ...newSymbol, symbol: e.target.value })}
                 />
-                <button onClick={addSymbol}>Add Symbol</button>
-              </div>
+                <button type="submit">Add Symbol</button>
+              </form>
             </div>
           </section>
 
@@ -435,73 +402,27 @@ const ConfigurationPage = ({ onSymbolsChange }) => {
           <section className="config-section">
             <h2>Chart Intervals</h2>
 
-            <div className="charts-list">
-              {visualCharts.map((chart, index) => {
-                // Find the original index in the base charts array for visual styling
-                const originalIndex = charts.findIndex(c => c === chart);
-                const isCurrentlyDragged = draggedChartIndex === originalIndex;
-
-                return (
-                  <div
-                    key={`${chart.interval}-${index}`}
-                    className={`chart-item ${isCurrentlyDragged ? 'dragging' : ''}`}
-                    draggable
-                    onDragStart={(e) => handleChartDragStart(e, originalIndex)}
-                    onDragOver={(e) => handleChartDragOver(e, index)}
-                    onDragLeave={handleChartDragLeave}
-                    onDrop={(e) => handleChartDrop(e, index)}
-                    onDragEnd={handleChartDragEnd}
-                  >
-                    <div className="drag-handle" title="Drag to reorder">
-                      <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                        <circle cx="4" cy="4" r="1" fill="currentColor"/>
-                        <circle cx="4" cy="8" r="1" fill="currentColor"/>
-                        <circle cx="4" cy="12" r="1" fill="currentColor"/>
-                        <circle cx="8" cy="4" r="1" fill="currentColor"/>
-                        <circle cx="8" cy="8" r="1" fill="currentColor"/>
-                        <circle cx="8" cy="12" r="1" fill="currentColor"/>
-                        <circle cx="12" cy="4" r="1" fill="currentColor"/>
-                        <circle cx="12" cy="8" r="1" fill="currentColor"/>
-                        <circle cx="12" cy="12" r="1" fill="currentColor"/>
-                      </svg>
-                    </div>
-                    <div className="chart-controls">
-                      <select
-                        value={chart.interval}
-                        onChange={(e) => updateChart(originalIndex, 'interval', e.target.value)}
-                      >
-                        {intervalOptions.map(interval => (
-                          <option key={interval} value={interval}>{interval}</option>
-                        ))}
-                      </select>
-                      <label className="visibility-checkbox-inline">
-                        <input
-                          type="checkbox"
-                          checked={chart.visible !== false}
-                          onChange={() => toggleChartVisibility(originalIndex)}
-                        />
-                        <span className="checkmark-small"></span>
-                        Visible
-                      </label>
-                    </div>
-                    <button onClick={() => removeChart(originalIndex)} className="remove-btn">Remove</button>
-                  </div>
-                );
-              })}
-            </div>
-
-            <div className="add-chart">
-              <div className="chart-form">
-                <select
-                  value={newChart.interval}
-                  onChange={(e) => setNewChart({ ...newChart, interval: e.target.value })}
+            <div className="charts-grid">
+              {charts.map((chart, index) => (
+                <div
+                  key={`${chart.interval}-${index}`}
+                  className={`chart-item-compact ${chart.visible ? 'visible' : 'hidden'}`}
+                  onClick={() => toggleChartVisibility(chart.interval)}
                 >
-                  {intervalOptions.map(interval => (
-                    <option key={interval} value={interval}>{interval}</option>
-                  ))}
-                </select>
-                <button onClick={addChart}>Add Chart</button>
-              </div>
+                  <div className="chart-interval-content">
+                    <input
+                      type="checkbox"
+                      checked={chart.visible || false}
+                      onChange={() => toggleChartVisibility(chart.interval)}
+                      style={{ display: 'none' }}
+                    />
+                    <span className="interval-text">{chart.interval}</span>
+                    <div className="check-indicator">
+                      {chart.visible && <span className="checkmark">✓</span>}
+                    </div>
+                  </div>
+                </div>
+              ))}
             </div>
           </section>
 
