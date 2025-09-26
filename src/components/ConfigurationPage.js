@@ -316,16 +316,19 @@ const ConfigurationPage = ({ onSymbolsChange }) => {
 
                 return (
                   <div
-                    key={`${symbol.coin}-${symbol.symbol}-${index}`}
+                    key={originalIndex}
                     className={`symbol-item ${isCurrentlyDragged ? 'dragging' : ''}`}
-                    draggable
-                    onDragStart={(e) => handleSymbolDragStart(e, originalIndex)}
                     onDragOver={(e) => handleSymbolDragOver(e, index)}
                     onDragLeave={handleSymbolDragLeave}
                     onDrop={(e) => handleSymbolDrop(e, index)}
+                  >
+                  <div 
+                    className="drag-handle" 
+                    title="Drag to reorder"
+                    draggable
+                    onDragStart={(e) => handleSymbolDragStart(e, originalIndex)}
                     onDragEnd={handleSymbolDragEnd}
                   >
-                  <div className="drag-handle" title="Drag to reorder">
                     <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
                       <circle cx="4" cy="4" r="1" fill="currentColor"/>
                       <circle cx="4" cy="8" r="1" fill="currentColor"/>

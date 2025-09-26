@@ -239,7 +239,7 @@
   border-radius: 4px;
   border: 1px solid #444;
   position: relative;
-  cursor: grab;
+  cursor: default;
   transition: all 0.2s ease;
 }
 
@@ -251,7 +251,7 @@
 .symbol-item.dragging {
   background: #2a2a2a;
   border: 2px solid #666;
-  cursor: grabbing;
+  cursor: default;
   opacity: 0.8;
 }
 
@@ -277,22 +277,25 @@
 
 .symbol-item {
   transition: all 0.2s ease;
+  cursor: default;
 }
 
 .symbol-item:not(.dragging):hover {
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  background: #3a3a3a;
+  border-color: #555;
 }
 
 .drag-handle {
   color: #888;
   cursor: grab;
-  padding: 4px;
+  padding: 8px;
   border-radius: 4px;
-  transition: color 0.2s ease;
+  transition: all 0.2s ease;
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-shrink: 0;
+  min-width: 32px;
 }
 
 .drag-handle:hover {
