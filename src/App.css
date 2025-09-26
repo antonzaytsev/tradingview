@@ -21,6 +21,12 @@
   width: calc(100% - 200px);
   min-height: 100vh;
   background-color: #1a1a1a;
+  transition: margin-left 0.3s ease, width 0.3s ease;
+}
+
+.app.sidebar-hidden .app-content {
+  margin-left: 0;
+  width: 100%;
 }
 
 .app-symbol-charts {
@@ -147,7 +153,11 @@
     background-color: #2d2d2d;
   }
 
-  .config-button, .home-button {
+  .navbar-links {
+    overflow-y: auto;
+  }
+
+  .config-button, .home-button, .toggle-button {
     background: none;
     border: none;
     cursor: pointer;
@@ -176,6 +186,15 @@
     }
   }
 
+  .toggle-button:hover {
+    background: rgba(244, 67, 54, 0.2);
+    color: #f44336;
+    
+    svg path {
+      stroke: #f44336;
+    }
+  }
+
   a {
     display: block;
     line-height: 30px;
@@ -197,6 +216,38 @@
   background: rgba(33, 150, 243, 0.2);
   border-left: 3px solid #2196f3;
   color: #ffffff;
+}
+
+
+.floating-sidebar-toggle {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  width: 48px;
+  height: 48px;
+  background-color: #2d2d2d;
+  border: 2px solid #404040;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 1001;
+  color: #ffffff;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.floating-sidebar-toggle:hover {
+  background-color: #3d3d3d;
+  border-color: #2196f3;
+  color: #2196f3;
+  transform: scale(1.1);
+}
+
+.floating-sidebar-toggle svg {
+  width: 24px;
+  height: 24px;
 }
 
 

@@ -11,6 +11,8 @@ import { SettingsProvider } from './contexts/SettingsContext';
 function App() {
   // Get symbols from configuration manager (localStorage or defaults)
   const [symbols, setSymbols] = useState([]);
+  // State for sidebar visibility
+  const [sidebarVisible, setSidebarVisible] = useState(true);
   
   // Load symbols on mount
   useEffect(() => {
@@ -28,13 +30,29 @@ function App() {
     setSymbols(visibleSymbols);
   };
 
+  // Function to toggle sidebar visibility
+  const toggleSidebar = () => {
+    setSidebarVisible(prev => !prev);
+  };
+
   return (
     <SettingsProvider>
       <BrowserRouter>
-        <div className='app'>
-          <div className="app-navbar">
-            <Navbar symbols={symbols} />
-          </div>
+        <div className={`app ${sidebarVisible ? '' : 'sidebar-hidden'}`}>
+          {sidebarVisible && (
+            <div className="app-navbar">
+              <Navbar symbols={symbols} onToggleSidebar={toggleSidebar} />
+            </div>
+          )}
+          {!sidebarVisible && (
+            <div className="floating-sidebar-toggle" onClick={toggleSidebar}>
+              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M3 12L21 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                <path d="M3 6L21 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                <path d="M3 18L21 18" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+            </div>
+          )}
           <div className="app-content">
             <Routes>
               <Route path="/" element={<HomePage />} />
