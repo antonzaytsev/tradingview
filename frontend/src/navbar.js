@@ -55,8 +55,8 @@ function Navbar({ symbols }) {
               {symbols.map(({ coin, exchange, symbol, settings }) => (
                 <Link
                   key={symbol}
-                  to={`/${symbol}`}
-                  className={`dropdown-item ${activeSymbol === `/${symbol}` ? 'active' : ''}`}
+                  to={`/symbol/${encodeURIComponent(symbol)}`}
+                  className={`dropdown-item ${activeSymbol === `/symbol/${encodeURIComponent(symbol)}` ? 'active' : ''}`}
                   onClick={() => setDropdownOpen(false)}
                 >
                   <div className="dropdown-item-main">

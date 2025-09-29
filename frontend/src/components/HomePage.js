@@ -7,7 +7,11 @@ const HomePage = () => {
   const [symbols, setSymbols] = useState([]);
 
   useEffect(() => {
-    setSymbols(ConfigManager.getSymbols());
+    const loadSymbols = async () => {
+      const loadedSymbols = await ConfigManager.getSymbols();
+      setSymbols(loadedSymbols);
+    };
+    loadSymbols();
   }, []);
 
   // Group symbols by coin for better organization
@@ -88,7 +92,7 @@ const HomePage = () => {
                 {coinSymbols.map(({ coin, exchange, symbol, settings }) => (
                   <Link 
                     key={symbol}
-                    to={`/${symbol}`} 
+                    to={`/symbol/${encodeURIComponent(symbol)}`} 
                     className="pair-tile"
                     style={{ '--coin-color': getCoinColor(coin) }}
                   >

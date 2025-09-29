@@ -57,24 +57,27 @@ const ConfigurationPage = ({ onSymbolsChange }) => {
 
   // Load current configuration
   useEffect(() => {
-    const config = ConfigManager.getAllConfig();
-    setSymbols(config.symbols);
-    
-    // Create comprehensive chart list with all available intervals inline
-    const allIntervals = ['1', '3', '5', '15', '30', '60', '120', '180', '240', 'D', 'W', 'M'];
-    const existingChartsMap = new Map();
-    config.charts.forEach(chart => {
-      existingChartsMap.set(chart.interval, chart);
-    });
-    
-    const completeCharts = allIntervals.map(interval => {
-      const existing = existingChartsMap.get(interval);
-      return existing || { interval, visible: false };
-    });
-    
-    setCharts(sortChartsByInterval(completeCharts));
-    setChartConfig(config.chartConfig);
-    isInitialized.current = true;
+    const loadConfig = async () => {
+      const config = await ConfigManager.getAllConfig();
+      setSymbols(config.symbols);
+      
+      // Create comprehensive chart list with all available intervals inline
+      const allIntervals = ['1', '3', '5', '15', '30', '60', '120', '180', '240', 'D', 'W', 'M'];
+      const existingChartsMap = new Map();
+      config.charts.forEach(chart => {
+        existingChartsMap.set(chart.interval, chart);
+      });
+      
+      const completeCharts = allIntervals.map(interval => {
+        const existing = existingChartsMap.get(interval);
+        return existing || { interval, visible: false };
+      });
+      
+      setCharts(sortChartsByInterval(completeCharts));
+      setChartConfig(config.chartConfig);
+      isInitialized.current = true;
+    };
+    loadConfig();
   }, []);
 
   // Helper function to show status with debouncing
@@ -90,9 +93,9 @@ const ConfigurationPage = ({ onSymbolsChange }) => {
   useEffect(() => {
     if (!isInitialized.current) return;
 
-    const saveTimer = setTimeout(() => {
+    const saveTimer = setTimeout(async () => {
       try {
-        ConfigManager.saveSymbols(symbols);
+        await ConfigManager.saveSymbols(symbols);
         handleSymbolsChange();
       } catch (error) {
         showStatus('Error saving trading pairs');
@@ -107,9 +110,9 @@ const ConfigurationPage = ({ onSymbolsChange }) => {
   useEffect(() => {
     if (!isInitialized.current) return;
 
-    const saveTimer = setTimeout(() => {
+    const saveTimer = setTimeout(async () => {
       try {
-        ConfigManager.saveCharts(charts);
+        await ConfigManager.saveCharts(charts);
       } catch (error) {
         showStatus('Error saving chart intervals');
         console.error('Error saving charts:', error);
@@ -123,9 +126,9 @@ const ConfigurationPage = ({ onSymbolsChange }) => {
   useEffect(() => {
     if (!isInitialized.current) return;
 
-    const saveTimer = setTimeout(() => {
+    const saveTimer = setTimeout(async () => {
       try {
-        ConfigManager.saveChartConfig(chartConfig);
+        await ConfigManager.saveChartConfig(chartConfig);
       } catch (error) {
         showStatus('Error saving chart settings');
         console.error('Error saving chart config:', error);
@@ -291,8 +294,8 @@ const ConfigurationPage = ({ onSymbolsChange }) => {
             <h3>🚨 Missing Trading Pairs</h3>
             <p>It looks like your trading pairs got cleared. Click below to restore the default pairs from input.js:</p>
             <button
-              onClick={() => {
-                ConfigManager.clearStorageAndRestoreDefaults();
+              onClick={async () => {
+                await ConfigManager.clearStorageAndRestoreDefaults();
                 window.location.reload();
               }}
               className="restore-defaults-btn"

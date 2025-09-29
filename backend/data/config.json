@@ -1,0 +1,157 @@
+{
+  "theme": "light",
+  "chartConfig": {
+    "allow_symbol_change": false,
+    "autosize": true,
+    "calendar": true,
+    "enable_publishing": false,
+    "hide_side_toolbar": true,
+    "hide_top_toolbar": true,
+    "locale": "en",
+    "save_image": false,
+    "style": "1",
+    "theme": "Dark",
+    "timezone": "Etc/UTC",
+    "withdateranges": false
+  },
+  "charts": [
+    {
+      "interval": "1",
+      "visible": false
+    },
+    {
+      "interval": "3",
+      "visible": false
+    },
+    {
+      "interval": "5",
+      "visible": false
+    },
+    {
+      "interval": "15",
+      "visible": true
+    },
+    {
+      "interval": "30",
+      "visible": false
+    },
+    {
+      "interval": "60",
+      "visible": true
+    },
+    {
+      "interval": "120",
+      "visible": false
+    },
+    {
+      "interval": "180",
+      "visible": false
+    },
+    {
+      "interval": "240",
+      "visible": true
+    },
+    {
+      "interval": "D",
+      "visible": true
+    },
+    {
+      "interval": "W",
+      "visible": true
+    },
+    {
+      "interval": "M",
+      "visible": true
+    }
+  ],
+  "symbols": [
+    {
+      "coin": "BTC",
+      "exchange": "Bybit",
+      "symbol": "BYBIT:BTCUSDT",
+      "visible": true
+    },
+    {
+      "coin": "BTC",
+      "exchange": "Kraken",
+      "symbol": "KRAKEN:BTCUSD",
+      "visible": true
+    },
+    {
+      "coin": "ETH",
+      "exchange": "Coinbase",
+      "symbol": "COINBASE:ETHUSD",
+      "visible": true
+    },
+    {
+      "coin": "ETH",
+      "exchange": "Bybit",
+      "symbol": "BYBIT:ETHUSDT",
+      "visible": true
+    },
+    {
+      "coin": "ETH",
+      "exchange": "Kraken",
+      "symbol": "KRAKEN:ETHUSD",
+      "visible": true
+    },
+    {
+      "coin": "ARB",
+      "exchange": "Bybit",
+      "symbol": "BYBIT:ARBUSDT",
+      "visible": true
+    },
+    {
+      "coin": "POL",
+      "exchange": "Bybit",
+      "symbol": "BYBIT:POLUSDT",
+      "visible": true
+    },
+    {
+      "coin": "TON",
+      "exchange": "Bybit",
+      "symbol": "BYBIT:TONUSDT",
+      "visible": true
+    },
+    {
+      "coin": "USDKZT",
+      "settings": {
+        "chart": {
+          "hide_volume": true
+        }
+      },
+      "symbol": "FX_IDC:USDKZT",
+      "visible": true
+    },
+    {
+      "coin": "USDRUB",
+      "settings": {
+        "chart": {
+          "hide_volume": true
+        }
+      },
+      "symbol": "FX_IDC:USDRUB",
+      "visible": true
+    },
+    {
+      "coin": "EURRUB",
+      "settings": {
+        "chart": {
+          "hide_volume": true
+        }
+      },
+      "symbol": "FX_IDC:EURRUB",
+      "visible": true
+    },
+    {
+      "coin": "USDEUR",
+      "settings": {
+        "chart": {
+          "hide_volume": true
+        }
+      },
+      "symbol": "FX_IDC:USDEUR",
+      "visible": true
+    }
+  ]
+}

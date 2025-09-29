@@ -1,5 +1,5 @@
 // Config storage utility using backend API
-const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:8080';
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:3021';
 const CONFIG_API = `${BACKEND_URL}/api/config`;
 
 const DEFAULT_CONFIG = {

@@ -285,3 +285,12 @@
     transform: rotate(360deg);
   }
 }
+
+.app-symbol-charts-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 200px;
+  font-size: 16px;
+  color: #666;
+}
