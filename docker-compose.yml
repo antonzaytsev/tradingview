@@ -2,7 +2,7 @@ services:
   tradingview-app:
     build: ./frontend
     ports:
-      - "3020:3000"
+      - "${FRONTEND_PORT:-3020}:3000"
     volumes:
       - ./frontend:/app
       - /app/node_modules
@@ -10,7 +10,7 @@ services:
       - NODE_ENV=development
       - CHOKIDAR_USEPOLLING=true
       - WDS_SOCKET_PORT=0
-      - REACT_APP_BACKEND_URL=http://localhost:3021
+      - REACT_APP_BACKEND_PORT=${BACKEND_PORT:-3021}
     stdin_open: true
     tty: true
     restart: always
@@ -20,7 +20,7 @@ services:
   backend:
     build: ./backend
     ports:
-      - "3021:8081"
+      - "${BACKEND_PORT:-3021}:8081"
     volumes:
       - ./backend/data:/data
     environment:
