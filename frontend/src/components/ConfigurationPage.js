@@ -9,15 +9,15 @@ const sortChartsByInterval = (chartsToSort) => {
   return [...chartsToSort].sort((a, b) => {
     const aInterval = a.interval;
     const bInterval = b.interval;
-    
+
     // Handle special cases first
     const timeOrder = { 'D': 1000, 'W': 2000, 'M': 3000 };
-    
+
     // If both are special time intervals
     if (timeOrder[aInterval] && timeOrder[bInterval]) {
       return timeOrder[aInterval] - timeOrder[bInterval];
     }
-    
+
     // If one is special, put it after numeric
     if (timeOrder[aInterval] && !timeOrder[bInterval]) {
       return 1;
@@ -25,11 +25,11 @@ const sortChartsByInterval = (chartsToSort) => {
     if (!timeOrder[aInterval] && timeOrder[bInterval]) {
       return -1;
     }
-    
+
     // Both are numeric, convert and compare
     const aNum = parseInt(aInterval, 10);
     const bNum = parseInt(bInterval, 10);
-    
+
     return aNum - bNum;
   });
 };
@@ -55,24 +55,29 @@ const ConfigurationPage = ({ onSymbolsChange }) => {
     }
   }, [onSymbolsChange]);
 
+  // Set page title
+  useEffect(() => {
+    document.title = 'Configuration | Trading Charts';
+  }, []);
+
   // Load current configuration
   useEffect(() => {
     const loadConfig = async () => {
       const config = await ConfigManager.getAllConfig();
       setSymbols(config.symbols);
-      
+
       // Create comprehensive chart list with all available intervals inline
       const allIntervals = ['1', '3', '5', '15', '30', '60', '120', '180', '240', 'D', 'W', 'M'];
       const existingChartsMap = new Map();
       config.charts.forEach(chart => {
         existingChartsMap.set(chart.interval, chart);
       });
-      
+
       const completeCharts = allIntervals.map(interval => {
         const existing = existingChartsMap.get(interval);
         return existing || { interval, visible: false };
       });
-      
+
       setCharts(sortChartsByInterval(completeCharts));
       setChartConfig(config.chartConfig);
       isInitialized.current = true;
@@ -325,8 +330,8 @@ const ConfigurationPage = ({ onSymbolsChange }) => {
                     onDragLeave={handleSymbolDragLeave}
                     onDrop={(e) => handleSymbolDrop(e, index)}
                   >
-                  <div 
-                    className="drag-handle" 
+                  <div
+                    className="drag-handle"
                     title="Drag to reorder"
                     draggable
                     onDragStart={(e) => handleSymbolDragStart(e, originalIndex)}

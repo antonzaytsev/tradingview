@@ -7,6 +7,10 @@ const HomePage = () => {
   const [symbols, setSymbols] = useState([]);
 
   useEffect(() => {
+    document.title = 'Trading Charts';
+  }, []);
+
+  useEffect(() => {
     const loadSymbols = async () => {
       const loadedSymbols = await ConfigManager.getSymbols();
       setSymbols(loadedSymbols);
@@ -78,8 +82,8 @@ const HomePage = () => {
           {Object.entries(groupedSymbols).map(([coin, coinSymbols]) => (
             <div key={coin} className="coin-group">
               <h2 className="coin-group-title">
-                <span 
-                  className="coin-icon" 
+                <span
+                  className="coin-icon"
                   style={{ color: getCoinColor(coin) }}
                 >
                   {getCoinIcon(coin)}
@@ -87,12 +91,12 @@ const HomePage = () => {
                 {coin}
                 <span className="coin-count">({coinSymbols.length} pair{coinSymbols.length !== 1 ? 's' : ''})</span>
               </h2>
-              
+
               <div className="coin-pairs">
                 {coinSymbols.map(({ coin, exchange, symbol, settings }) => (
-                  <Link 
+                  <Link
                     key={symbol}
-                    to={`/symbol/${encodeURIComponent(symbol)}`} 
+                    to={`/symbol/${encodeURIComponent(symbol)}`}
                     className="pair-tile"
                     style={{ '--coin-color': getCoinColor(coin) }}
                   >
@@ -105,15 +109,15 @@ const HomePage = () => {
                         <div className="pair-exchange">{exchange}</div>
                       )}
                     </div>
-                    
+
                     <div className="pair-symbol">
                       {symbol}
                     </div>
-                    
+
                     {settings?.chart?.hide_volume && (
                       <div className="pair-badge">No Volume</div>
                     )}
-                    
+
                     <div className="pair-arrow">→</div>
                   </Link>
                 ))}

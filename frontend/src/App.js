@@ -12,15 +12,20 @@ import { SettingsProvider } from './contexts/SettingsContext';
 function SymbolRouteHandler({ symbols }) {
   const { encodedSymbol } = useParams();
   const decodedSymbol = decodeURIComponent(encodedSymbol);
-  
+
+  const symbolData = symbols.find(s => s.symbol === decodedSymbol);
+
+  useEffect(() => {
+    if (symbolData) {
+      document.title = `${symbolData.symbol}`;
+    }
+  }, [symbolData]);
+
   // If symbols are not loaded yet, show loading
   if (symbols.length === 0) {
     return <div className="app-symbol-charts-loading">Loading symbol data...</div>;
   }
-  
-  // Find the matching symbol object
-  const symbolData = symbols.find(s => s.symbol === decodedSymbol);
-  
+
   if (!symbolData) {
     return (
       <div style={{ padding: '20px', textAlign: 'center' }}>
@@ -31,20 +36,18 @@ function SymbolRouteHandler({ symbols }) {
       </div>
     );
   }
-  
-  return <SymbolCharts 
-    symbol={symbolData.symbol} 
-    localSettings={symbolData.settings} 
-    exchange={symbolData.exchange} 
-    coin={symbolData.coin} 
+
+  return <SymbolCharts
+    symbol={symbolData.symbol}
+    localSettings={symbolData.settings}
+    exchange={symbolData.exchange}
+    coin={symbolData.coin}
   />;
 }
 
 function App() {
-  // Get symbols from configuration manager (localStorage or defaults)
   const [symbols, setSymbols] = useState([]);
-  
-  // Load symbols on mount
+
   useEffect(() => {
     const loadSymbols = async () => {
       try {
